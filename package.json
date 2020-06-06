@@ -1,0 +1,18 @@
+{
+  "name": "socket.io-introduction",
+  "version": "0.0.1",
+  "description": "\"My first socket.io app\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@charliecech.github.com:charliecech/Socket.IO-Introduction.git"
+  },
+  "author": "Carlos Cordon",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
