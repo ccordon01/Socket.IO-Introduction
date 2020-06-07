@@ -8,12 +8,18 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     // console.log(`${socket.id} user connected`);
-    io.emit('user status', `${socket.id} connected`);
+    socket.broadcast.emit('user status', `${socket.id} connected`);
     socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
+        socket.broadcast.emit('new chat message', msg);
     });
     socket.on('disconnect', () => {
-        io.emit('user status', `${socket.id} disconnected`);
+        socket.broadcast.emit('user status', `${socket.id} disconnected`);
+    });
+    socket.on('type event', () => {
+        socket.broadcast.emit('type event', `${socket.id} is typing...`);
+    });
+    socket.on('stop type event', () => {
+        socket.broadcast.emit('stop type event', `${socket.id} disconnected`);
     });
 });
 

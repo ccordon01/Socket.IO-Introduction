@@ -58,7 +58,7 @@
             background: #eee;
         }
 
-        p{
+        p {
             background-color: black;
             color: white;
             width: 100%;
@@ -71,6 +71,28 @@
     <script>
         $(function () {
             var socket = io();
+            var typingTimer;
+            var startTypingInterval = 10;
+            var stopTypingInterval = 500;
+            $('#m').keydown(function () {
+                if ($('#m').val()) {
+                clearTimeout(typingTimer);
+                    typingTimer = setTimeout(function () {
+                        socket.emit('type event');
+                    }, startTypingInterval);
+                }
+                else {
+                    typingTimer = setTimeout(function () {
+                        socket.emit('stop type event');
+                    }, stopTypingInterval);
+                }
+            });
+            $('#m').keyup(function () {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(function () {
+                    socket.emit('stop type event');
+                }, stopTypingInterval);
+            });
             $('form').submit(function (e) {
                 e.preventDefault(); // prevents page reloading
                 socket.emit('chat message', $('#m').val());
@@ -81,13 +103,22 @@
             socket.on('user status', function (msg) {
                 $('#messages').append($('<li id="user_status">').text(msg));
             });
+            socket.on('new chat message', function (msg) {
+                $('#messages').append($('<li>').text(msg));
+            });
+            socket.on('type event', function (msg) {
+                $('#type_event').text(msg);
+            });
+            socket.on('stop type event', function (msg) {
+                $('#type_event').text('');
+            });
         });
     </script>
 </head>
 
 <body>
     <ul id="messages"></ul>
-    <p></p>
+    <p id="type_event"></p>
     <form action="">
         <input id="m" autocomplete="off" /><button>Send</button>
     </form>
