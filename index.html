@@ -43,11 +43,27 @@
         }
 
         #messages li {
+            font-weight: bold;
+            font-size: 120%;
+            padding: 5px 10px;
+        }
+
+        #user_status {
+            font-weight: bold;
+            font-size: 105%;
             padding: 5px 10px;
         }
 
         #messages li:nth-child(odd) {
             background: #eee;
+        }
+
+        p{
+            background-color: black;
+            color: white;
+            width: 100%;
+            bottom: 41px;
+            position: fixed;
         }
     </style>
     <script src="/socket.io/socket.io.js"></script>
@@ -58,11 +74,12 @@
             $('form').submit(function (e) {
                 e.preventDefault(); // prevents page reloading
                 socket.emit('chat message', $('#m').val());
+                $('#messages').append($('<li>').text($('#m').val()));
                 $('#m').val('');
                 return false;
             });
-            socket.on('chat message', function (msg) {
-                $('#messages').append($('<li>').text(msg));
+            socket.on('user status', function (msg) {
+                $('#messages').append($('<li id="user_status">').text(msg));
             });
         });
     </script>
@@ -70,6 +87,7 @@
 
 <body>
     <ul id="messages"></ul>
+    <p></p>
     <form action="">
         <input id="m" autocomplete="off" /><button>Send</button>
     </form>
